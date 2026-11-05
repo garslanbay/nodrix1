@@ -38,7 +38,7 @@ app.get("/ai-test", async (c) => {
   }
 });
 
-app.post("/ai-anomaly", async (c) => {
+app.post(["/ai-anomaly", "/a"], async (c) => {
   const { AI } = c.env;
 
   try {
