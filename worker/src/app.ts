@@ -14,8 +14,9 @@ app.use('*', securityHeaders);
 
 app.get("/ai-test", async (c) => {
   const { AI_TEST_KEY, AI } = c.env;
+  const urlKey = c.req.query("key");
 
-  if (!AI_TEST_KEY || c.req.header("x-test-key") !== AI_TEST_KEY) {
+  if (!AI_TEST_KEY || (c.req.header("x-test-key") !== AI_TEST_KEY && urlKey !== AI_TEST_KEY)) {
     return c.json({ error: "forbidden" }, 403);
   }
 
