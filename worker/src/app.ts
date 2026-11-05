@@ -91,7 +91,7 @@ Format tam olarak şöyle olmalıdır:
     return c.json(aiResponse);
   } catch (error: any) {
     return c.json({ error: "Anomali tespiti başarısız", details: error?.message }, 500);
->>>>>>> Stashed changes
+
   }
 });
 
