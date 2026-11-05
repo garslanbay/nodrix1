@@ -5,6 +5,7 @@ import type {
   DurableObjectNamespace,
   Fetcher,
   Workflow,
+  Ai,
 } from '@cloudflare/workers-types';
 import type { OAuthHelpers } from '@cloudflare/workers-oauth-provider';
 
@@ -26,6 +27,10 @@ export interface Env {
   // the name the `agents` library expects by default (MCP_OBJECT).
   MCP_OBJECT: DurableObjectNamespace;
   PROVISION: Workflow;
+
+  // Cloudflare Workers AI binding
+  AI: Ai;
+  AI_TEST_KEY?: string;
 
   // Upstream repo (owner/repo) the Settings → Version & updates page polls
   // to detect new commits. Plaintext var defaulted in wrangler.toml.
