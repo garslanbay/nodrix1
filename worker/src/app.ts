@@ -40,7 +40,7 @@ app.get("/ai-test", async (c) => {
 
 app.post("/ai-anomaly", async (c) => {
   const { AI } = c.env;
-<<<<<<< Updated upstream
+
   const body = await c.req.json(); // { device_id, temperature, current, voltage }
 
   const prompt = `
