@@ -63,7 +63,7 @@ app.post("/ai-anomaly", async (c) => {
     return c.json(aiResponse);
   } catch (error: any) {
     return c.json({ error: "Anomali analizi başarısız", details: error?.message }, 500);
-=======
+
   const body = await c.req.json();
 
   try {
