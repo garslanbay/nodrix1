@@ -38,7 +38,7 @@ app.get("/ai-test", async (c) => {
   }
 });
 
-app.post(["/ai-anomaly", "/a"], async (c) => {
+app.post("/ai-anomaly", async (c) => {
   const { AI } = c.env;
 
   try {
@@ -69,6 +69,26 @@ Format tam olarak şöyle olmalıdır:
   } catch (error: any) {
     return c.json({ error: "Anomali tespiti başarısız", details: error?.message }, 500);
   }
+});
+app.post("/a", async (c) => {
+  const body = await c.req.json();
+
+  const response = await c.env.AI.run("@cf/meta/llama-3.1-8b-instruct-fp8", {
+    messages: [
+      {
+        role: "system",
+        content: `Verilen IoT sensör verilerini analiz et.
+Sadece şu JSON formatında cevap ver:
+{"isAnomaly":true,"severity":"high","reason":"Türkçe açıklama"}`
+      },
+      {
+        role: "user",
+        content: JSON.stringify(body)
+      }
+    ]
+  });
+
+  return c.json(response);
 });
 
 // First request after a deploy applies pending migrations; guarded + best-effort.
