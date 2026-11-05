@@ -1,4 +1,4 @@
-name = "nodrix"
+name = "nodrix1"
 main = "worker/src/index.ts"
 compatibility_date = "2025-05-01"
 compatibility_flags = ["nodejs_compat"]
