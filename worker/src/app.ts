@@ -9,21 +9,34 @@ import { registerRoutes } from './routes';
 
 const app = new Hono<{ Bindings: Env }>();
 
+// Security headers middleware should run first for all routes
+app.use('*', securityHeaders);
+
 app.get("/ai-test", async (c) => {
-  const env = c.env as any;
-  if (!env.AI_TEST_KEY || c.req.header("x-test-key") !== env.AI_TEST_KEY) {
+  const { AI_TEST_KEY, AI } = c.env;
+  const urlKey = c.req.query("key");
+
+  if (!AI_TEST_KEY || (c.req.header("x-test-key") !== AI_TEST_KEY && urlKey !== AI_TEST_KEY)) {
     return c.json({ error: "forbidden" }, 403);
   }
-  if (!env.AI) {
+
+  if (!AI) {
     return c.json({ error: "AI binding yok" }, 500);
   }
-  const result = await env.AI.run("@cf/meta/llama-3-8b-instruct", {
-    messages: [{ role: "user", content: "Tek cumlede merhaba de." }],
-  });
-  return c.json(result);
-});
 
-app.use('*', securityHeaders);
+  try {
+    const result = await AI.run("@cf/meta/llama-3.1-8b-instruct-fp8", {
+      messages: [{ role: "user", content: "Tek cumlede merhaba de." }],
+    });
+    return c.json(result);
+  } catch (error: any) {
+    console.error('[ai-test] execution error:', error);
+    return c.json({ 
+      error: "AI çalıştırma hatası", 
+      details: error?.message || String(error) 
+    }, 500);
+  }
+});
 
 // First request after a deploy applies pending migrations; guarded + best-effort.
 app.use('*', async (c, next) => {
