@@ -41,32 +41,9 @@ app.get("/ai-test", async (c) => {
 app.post("/ai-anomaly", async (c) => {
   const { AI } = c.env;
 
-  const body = await c.req.json(); // { device_id, temperature, current, voltage }
-
-  const prompt = `
-  Aşağıdaki IoT sensör verilerini analiz et ve anomali olup olmadığını kontrol et.
-  Veri: ${JSON.stringify(body)}
-  
-  Sadece şu JSON formatında yanıt ver:
-  {
-    "isAnomaly": true/false,
-    "severity": "low/medium/high",
-    "reason": "Kısa açıklama"
-  }
-  `;
-
   try {
-    const aiResponse = await AI.run("@cf/meta/llama-3.1-8b-instruct-fp8", {
-      messages: [{ role: "user", content: prompt }],
-    });
-    
-    return c.json(aiResponse);
-  } catch (error: any) {
-    return c.json({ error: "Anomali analizi başarısız", details: error?.message }, 500);
+    const body = await c.req.json();
 
-  const body = await c.req.json();
-
-  try {
     const aiResponse = await AI.run("@cf/meta/llama-3.1-8b-instruct-fp8", {
       messages: [
         {
@@ -91,7 +68,6 @@ Format tam olarak şöyle olmalıdır:
     return c.json(aiResponse);
   } catch (error: any) {
     return c.json({ error: "Anomali tespiti başarısız", details: error?.message }, 500);
-
   }
 });
 
