@@ -26,6 +26,11 @@ export async function runHttpService(
   if (secret && typeof init.body === 'string') {
     headers['x-nodrix-signature'] = await hmacHex(secret, init.body);
   }
-
+console.log("[HTTP SERVICE TEST]", {
+  url,
+  method,
+  headers,
+  body: init.body
+});
   return doFetch(url, init);
 }
